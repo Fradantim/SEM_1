@@ -5,7 +5,7 @@ import com.tmi.entities.Ejercicio;
 import com.tmi.exceptions.ObjetoInexistenteException;
 
 public class EjercicioController {
-	private Dao<Ejercicio> daoEjercicio = new Dao<Ejercicio>();
+	private Dao<Ejercicio> daoEjercicio = new Dao<Ejercicio>(Ejercicio.class);
 	
 	public Ejercicio altaEjercicio(String nombre, String descripcion) {
 		Ejercicio e = new Ejercicio(nombre, descripcion);

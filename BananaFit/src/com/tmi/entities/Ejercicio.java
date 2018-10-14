@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="EJERCICIO")
@@ -17,6 +18,7 @@ public class Ejercicio extends AbsEntity{
 	@Column (name="DESCRIPCION", nullable=true)
 	private String descripcion;
 
+	@Transient
 	private List<Rutina> rutinas;
 	
 	public Ejercicio() { }

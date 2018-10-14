@@ -10,7 +10,7 @@ import com.tmi.exceptions.ObjetoInexistenteException;
 public class testEjercicio {
 
 	public static void main(String args[]) {
-		Dao<Ejercicio> dao = new Dao<Ejercicio>();
+		Dao<Ejercicio> dao = new Dao<Ejercicio>(Ejercicio.class);
 		
 		List<Ejercicio> entities = new ArrayList<>();
 		

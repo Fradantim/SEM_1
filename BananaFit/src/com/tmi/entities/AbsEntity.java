@@ -3,14 +3,15 @@ package com.tmi.entities;
 import java.lang.reflect.Method;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
 
-@Entity
-@Embeddable
+@MappedSuperclass
 public abstract class AbsEntity {
 	
 	@Id 

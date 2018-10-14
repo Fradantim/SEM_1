@@ -10,7 +10,7 @@ import com.tmi.exceptions.ObjetoInexistenteException;
 public class testNIF {
 
 	public static void main(String args[]) {
-		Dao<NIF> dao = new Dao<NIF>();
+		Dao<NIF> dao = new Dao<NIF>(NIF.class);
 		
 		List<NIF> NIFs = new ArrayList<>();
 		

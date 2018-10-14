@@ -6,17 +6,21 @@ import com.tmi.entities.AbsEntity;
 import com.tmi.exceptions.ObjetoInexistenteException;
 import com.tmi.hbt.HibernateUtil;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
 
 public class Dao<T extends AbsEntity> {
+	
+	private Class<T> type;
+	
+	public Dao (Class<T> type){
+		this.type = type;
+	}
 
-	@SuppressWarnings("unchecked")
 	private String getClassName() {
-		return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getTypeName();
+		return type.getSimpleName();
 	}
 	
 	public Integer grabar(AbsEntity entity){
@@ -59,6 +63,7 @@ public class Dao<T extends AbsEntity> {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<T> getAll() {
+		System.out.println(getClassName());
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		List<T> list = session.createQuery("from "+getClassName()).list();
