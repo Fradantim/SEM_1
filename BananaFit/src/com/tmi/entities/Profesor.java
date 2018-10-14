@@ -9,22 +9,22 @@ import javax.persistence.Entity;
 import com.tmi.exceptions.SeSuperponenClases;
 
 @Entity
-public class Profesor extends Persona{
+public class Profesor extends Usuario{
 
-	private List<Sesion> sesionesDictadas;
+	private List<Clase> sesionesDictadas;
 
 	public Profesor() {}
 	
-	public Profesor(String nombre, Date ultimaPresentacionAptaMedica, String user, String pass) {
-		super(nombre, ultimaPresentacionAptaMedica, user, pass);
+	public Profesor(String nombre, Date ultimaPresentacionAptaMedica, String user, String pass, NIF nif, int nroNIF) {
+		super(nombre, ultimaPresentacionAptaMedica, user, pass, nif, nroNIF);
 		sesionesDictadas= new ArrayList<>();
 	}
 
-	public List<Sesion> getSesionesDictadas() {
+	public List<Clase> getSesionesDictadas() {
 		return sesionesDictadas;
 	}
 
-	public void setSesionesDictadas(List<Sesion> sesionesDictadas) {
+	public void setSesionesDictadas(List<Clase> sesionesDictadas) {
 		this.sesionesDictadas = sesionesDictadas;
 	}
 	
@@ -38,17 +38,17 @@ public class Profesor extends Persona{
 	    return false;
 	}
 	
-	public void asignarClase(Sesion sesion) throws SeSuperponenClases {
+	public void asignarClase(Clase sesion) throws SeSuperponenClases {
 		if(!puedeAsistirALaClase(sesion)) {
-			throw new SeSuperponenClases("La sesion que se desea asignar al docente "+ id +" se superone a otra clase");
+			throw new SeSuperponenClases("La sesion "+sesion.getId() +" que se desea asignar al docente "+ id +" se superone a otra clase");
 		}
 		
 		sesionesDictadas.add(sesion);
 	}
 	
 	@Override
-	public boolean puedeAsistirALaClase(Sesion sesion) {
-		for(Sesion clase: sesionesDictadas) {
+	public boolean puedeAsistirALaClase(Clase sesion) {
+		for(Clase clase: sesionesDictadas) {
 			if(sesion.getDia()==clase.getDia()) {
 				//Si empieza durante otra clase que ya da
 				if(sesion.getMinutoInicio()>=clase.getMinutoInicio() && sesion.getMinutoInicio()<=clase.getMinutoFin())
@@ -62,7 +62,7 @@ public class Profesor extends Persona{
 			}
 		}
 		
-		for(Sesion clase: sesiones) {
+		for(Clase clase: sesiones) {
 			if(sesion.getDia()==clase.getDia()) {
 				//Si empieza durante otra clase que ya da
 				if(sesion.getMinutoInicio()>=clase.getMinutoInicio() && sesion.getMinutoInicio()<=clase.getMinutoFin())

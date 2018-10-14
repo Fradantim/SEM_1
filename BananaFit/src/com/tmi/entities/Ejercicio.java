@@ -3,15 +3,18 @@ package com.tmi.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
-public class Ejercicio {
+@Table(name="EJERCICIO")
+public class Ejercicio extends AbsEntity{
 	
-	private Integer id;
-	
+	@Column (name="NOMBRE", unique=true)
 	private String nombre;
 	
+	@Column (name="DESCRIPCION", nullable=true)
 	private String descripcion;
 
 	private List<Rutina> rutinas;
@@ -23,14 +26,6 @@ public class Ejercicio {
 		this.setRutinas(new ArrayList<>());
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getNombre() {

@@ -14,7 +14,7 @@ public class Rutina {
 	
 	private String descripcion;
 	
-	private Persona creador;
+	private Usuario creador;
 	
 	private int series;
 	
@@ -22,11 +22,11 @@ public class Rutina {
 	
 	private List<Ejercicio> ejercicios;
 	
-	private List<Persona> personas;
+	private List<Usuario> personas;
 
 	public Rutina() { }
 	
-	public Rutina(String nombre, String descripcion, Persona creador, int series, int duracionEjercicio) {
+	public Rutina(String nombre, String descripcion, Usuario creador, int series, int duracionEjercicio) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
@@ -61,11 +61,11 @@ public class Rutina {
 		this.descripcion = descripcion;
 	}
 
-	public Persona getCreador() {
+	public Usuario getCreador() {
 		return creador;
 	}
 
-	public void setCreador(Persona creador) {
+	public void setCreador(Usuario creador) {
 		this.creador = creador;
 	}
 
@@ -93,11 +93,11 @@ public class Rutina {
 		this.ejercicios = ejercicios;
 	}
 
-	public List<Persona> getPersonas() {
+	public List<Usuario> getPersonas() {
 		return personas;
 	}
 
-	public void setPersonas(List<Persona> personas) {
+	public void setPersonas(List<Usuario> personas) {
 		this.personas = personas;
 	}
 	

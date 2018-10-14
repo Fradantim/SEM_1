@@ -3,7 +3,7 @@ package com.tmi.entities;
 import javax.persistence.Entity;
 
 @Entity
-public class Socio extends Persona{
+public class Socio extends Usuario{
 
 	public Socio () { }
 	

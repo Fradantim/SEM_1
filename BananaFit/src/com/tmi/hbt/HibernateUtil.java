@@ -3,6 +3,9 @@ package com.tmi.hbt;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
+import com.tmi.entities.Ejercicio;
+import com.tmi.entities.NIF;
+
 public class HibernateUtil
 {
     private static final SessionFactory sessionFactory;
@@ -13,6 +16,9 @@ public class HibernateUtil
         {
         	 AnnotationConfiguration config = new AnnotationConfiguration();
              //config.addAnnotatedClass(ArticuloEntity.class);
+        	 //TODO evaluar si se puede agregar dinamicamente las extensiones de Entity
+        	 config.addAnnotatedClass(NIF.class);
+        	 config.addAnnotatedClass(Ejercicio.class);
              //TODO Agregar todas las entities----
              sessionFactory = config.buildSessionFactory();
         }

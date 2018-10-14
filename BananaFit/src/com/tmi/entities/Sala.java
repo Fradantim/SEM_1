@@ -16,7 +16,7 @@ public class Sala {
 	
 	private int capacidad;
 	
-	private List<Sesion> sesiones;
+	private List<Clase> sesiones;
 	
 	public Sala(String nombre, int capacidad) {
 		super();
@@ -49,11 +49,11 @@ public class Sala {
 		this.capacidad = capacidad;
 	}
 
-	public List<Sesion> getSesiones() {
+	public List<Clase> getSesiones() {
 		return sesiones;
 	}
 
-	public void setSesiones(List<Sesion> sesiones) {
+	public void setSesiones(List<Clase> sesiones) {
 		this.sesiones = sesiones;
 	}
 
@@ -67,8 +67,8 @@ public class Sala {
 	    return false;
 	}
 	
-	public boolean puedeAsignarseSesion (Sesion sesion) {
-		for(Sesion clase: sesiones) {
+	public boolean puedeAsignarseSesion (Clase sesion) {
+		for(Clase clase: sesiones) {
 			if(sesion.getDia()==clase.getDia()) {
 				//Si empieza durante otra clase que ya da
 				if(sesion.getMinutoInicio()>=clase.getMinutoInicio() && sesion.getMinutoInicio()<=clase.getMinutoFin())
@@ -84,7 +84,7 @@ public class Sala {
 		return true;
 	}
 	
-	public void asignarSesion(Sesion sesion) throws SeSuperponenClases {
+	public void asignarSesion(Clase sesion) throws SeSuperponenClases {
 		if(!puedeAsignarseSesion(sesion)) {
 			throw new SeSuperponenClases("La sesion que se desea asignar a la sala "+ id +" se superone a otra clase");
 		}

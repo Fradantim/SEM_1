@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import com.tmi.exceptions.SeSuperponenClases;
 
 @Entity
-public abstract class Persona {
+public abstract class Usuario {
 	
 	protected Integer id;
 	
@@ -21,20 +21,28 @@ public abstract class Persona {
 	
 	protected String pass;
 	
+	protected String tipo;
+	
 	protected List<Rutina> rutinasCreadas;
 	
 	protected List<Rutina> rutinasAsociadas;
 	
-	protected List<Sesion> sesiones;
+	protected List<Clase> sesiones;
 
-	public Persona() { }
+	protected int nroNIF ;
 	
-	public Persona(String nombre, Date ultimaPresentacionAptaMedica, String user, String pass) {
+	protected NIF nif;
+
+	public Usuario() { }
+	
+	public Usuario(String nombre, Date ultimaPresentacionAptaMedica, String user, String pass, NIF nif, int nroNIF) {
 		super();
 		this.nombre = nombre;
 		this.ultimaPresentacionAptaMedica = ultimaPresentacionAptaMedica;
 		this.user = user;
 		this.pass = pass;
+		this.nif = nif;
+		this.nroNIF = nroNIF; 
 		this.rutinasCreadas = new ArrayList<>();
 		this.rutinasAsociadas = new ArrayList<>();
 		this.sesiones = new ArrayList<>();
@@ -80,11 +88,11 @@ public abstract class Persona {
 		this.rutinasAsociadas = rutinasAsociadas;
 	}
 
-	public List<Sesion> getSesiones() {
+	public List<Clase> getSesiones() {
 		return sesiones;
 	}
 
-	public void setSesiones(List<Sesion> sesiones) {
+	public void setSesiones(List<Clase> sesiones) {
 		this.sesiones = sesiones;
 	}
 	
@@ -104,18 +112,42 @@ public abstract class Persona {
 		this.ultimaPresentacionAptaMedica = ultimaPresentacionAptaMedica;
 	}	
 	
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
+	public NIF getNif() {
+		return nif;
+	}
+
+	public void setNif(NIF nif) {
+		this.nif = nif;
+	}
+
+	public int getNroNIF() {
+		return nroNIF;
+	}
+
+	public void setNroNIF(int nroNIF) {
+		this.nroNIF = nroNIF;
+	}
+	
 	@Override
 	public boolean equals(Object other){
 	    if (other == null) return false;
 	    if (other == this) return true;
-	    if (!(other instanceof Persona))return false;
-	    Persona otherMyClass = (Persona)other;
+	    if (!(other instanceof Usuario))return false;
+	    Usuario otherMyClass = (Usuario)other;
 	    if(otherMyClass.getId()== this.getId()) return true;
 	    return false;
 	}
 	
-	public boolean puedeAsistirALaClase(Sesion sesion) {
-		for(Sesion clase: sesiones) {
+	public boolean puedeAsistirALaClase(Clase sesion) {
+		for(Clase clase: sesiones) {
 			if(sesion.getDia()==clase.getDia()) {
 				//Si empieza durante otra clase que ya da
 				if(sesion.getMinutoInicio()>=clase.getMinutoInicio() && sesion.getMinutoInicio()<=clase.getMinutoFin())
@@ -131,14 +163,14 @@ public abstract class Persona {
 		return true;
 	}
 	
-	public void asignarSesion(Sesion sesion) throws SeSuperponenClases {
+	public void asignarSesion(Clase sesion) throws SeSuperponenClases {
 		if(!puedeAsistirALaClase(sesion)) {
 			throw new SeSuperponenClases("La sesion que se desea asignar a la persona "+ id +" se superone a otra clase");
 		}
 		sesiones.add(sesion);
 	}
 	
-	public void removerSesion(Sesion sesion) {
+	public void removerSesion(Clase sesion) {
 		sesiones.remove(sesion);
 	}
 }

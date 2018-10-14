@@ -5,30 +5,46 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
+import com.tmi.exceptions.LaSesionTieneCupoLleno;
+
 @Entity
 public class Clase {
-	
+
 	private Integer id;
 	
-	private String nombre;
-	
 	/**
-	 * En minutos
+	 * Cantidad de minutos desde la 00hs
 	 */
-	private int duracion;
+	private int minutoInicio;
 	
-	private String descripcion;
+	private Profesor docente;
+	
+	private int dia;
 
-	private List<Sesion> sesiones;
+	private Actividad actividad;
 	
-	public Clase() { }
+	private List<Usuario> inscriptos;
 	
-	public Clase(String nombre, int duracion, String descripcion) {
+	private Sala sala;
+	
+	public Clase () { }
+	
+	public Clase(int minutoInicio, Profesor docente, int dia, Actividad actividad, Sala sala) {
 		super();
-		this.sesiones= new ArrayList<>();
-		this.nombre = nombre;
-		this.duracion = duracion;
-		this.descripcion = descripcion;
+		this.inscriptos= new ArrayList<>();
+		this.minutoInicio = minutoInicio;
+		this.docente = docente;
+		this.dia = dia;
+		this.actividad = actividad;
+		this.setSala(sala);
+	}	
+	
+	public Actividad getActividad() {
+		return actividad;
+	}
+
+	public void setActividad(Actividad actividad) {
+		this.actividad = actividad;
 	}
 
 	public Integer getId() {
@@ -39,42 +55,50 @@ public class Clase {
 		this.id = id;
 	}
 
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	/**
+	 * @return Cantidad de minutos desde la 00hs
+	 */
+	public int getMinutoInicio() {
+		return minutoInicio;
 	}
 
 	/**
-	 * @return duracion de la Clase en minutos
+	 * @param minutoInicio Cantidad de minutos desde la 00hs
 	 */
-	public int getDuracion() {
-		return duracion;
+	public void setMinutoInicio(int minutoInicio) {
+		this.minutoInicio = minutoInicio;
 	}
 
-	/**
-	 * @param duracion de la Clase en minutos
-	 */
-	public void setDuracion(int duracion) {
-		this.duracion = duracion;
+	public Profesor getDocente() {
+		return docente;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public void setDocente(Profesor docente) {
+		this.docente = docente;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public int getDia() {
+		return dia;
 	}
 
-	public List<Sesion> getSesiones() {
-		return sesiones;
+	public void setDia(int dia) {
+		this.dia = dia;
 	}
 
-	public void setSesiones(List<Sesion> sesiones) {
-		this.sesiones = sesiones;
+	public List<Usuario> getInscriptos() {
+		return inscriptos;
+	}
+
+	public void setInscriptos(List<Usuario> inscriptos) {
+		this.inscriptos = inscriptos;
+	}
+
+	public Sala getSala() {
+		return sala;
+	}
+
+	public void setSala(Sala sala) {
+		this.sala = sala;
 	}
 	
 	@Override
@@ -87,5 +111,22 @@ public class Clase {
 	    return false;
 	}
 	
+	public void inscribirPersona(Usuario persona) throws LaSesionTieneCupoLleno {
+		if (inscriptos.size()==sala.getCapacidad()) {
+			throw new LaSesionTieneCupoLleno("La Sesion "+ id + " de la Clase "+ actividad.getId()+" ya posee el cupo completo.");
+		} else {
+			inscriptos.add(persona);
+		}
+	}
 	
+	public void removerPersona(Usuario persona) {
+		inscriptos.remove(persona);
+	}
+	
+	/**
+	 * @return suma de minutoInicio + duracion
+	 */
+	public int getMinutoFin() {
+		return minutoInicio+actividad.getDuracion();
+	}
 }
