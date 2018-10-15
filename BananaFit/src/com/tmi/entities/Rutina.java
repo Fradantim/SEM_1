@@ -3,25 +3,41 @@ package com.tmi.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 
 @Entity
-public class Rutina {
+public class Rutina extends AbsEntity{
 
-	private Integer id;
-	
+	@Column (name="NOMBRE", unique=true)
 	private String nombre;
 	
+	@Column (name="DESCRIPCION", nullable=true)
 	private String descripcion;
 	
+	@Transient //TODO hacer mapeo
 	private Usuario creador;
 	
+	@Column (name="SERIES", nullable=true)
 	private int series;
 	
+	@Column (name="DURACION_EJERCICIO", nullable=true)
 	private int duracionEjercicio;
 	
+	@ManyToMany(cascade = {CascadeType.ALL},fetch=FetchType.LAZY)
+    @JoinTable(name = "EJERCICIO_RUTINA",
+    	joinColumns = @JoinColumn(name = "RUTINA_ID"),
+    	inverseJoinColumns = @JoinColumn(name = "EJERCICIO_ID")
+    	)
 	private List<Ejercicio> ejercicios;
 	
+	@Transient //TODO hacer mapeo
 	private List<Usuario> personas;
 
 	public Rutina() { }
@@ -35,14 +51,6 @@ public class Rutina {
 		this.duracionEjercicio = duracionEjercicio;
 		this.ejercicios = new ArrayList<>();
 		this.personas = new ArrayList<>();
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getNombre() {

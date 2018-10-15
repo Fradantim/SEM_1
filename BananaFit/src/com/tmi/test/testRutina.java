@@ -4,40 +4,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tmi.daos.Dao;
-import com.tmi.entities.NIF;
+import com.tmi.entities.Ejercicio;
 import com.tmi.exceptions.ObjetoInexistenteException;
 
-public class testNIF {
+public class testRutina {
 
 	public static void main(String args[]) {
-		Dao<NIF> dao = new Dao<NIF>(NIF.class);
+		Dao<Ejercicio> dao = new Dao<Ejercicio>(Ejercicio.class);
 		
-		List<NIF> NIFs = new ArrayList<>();
+		List<Ejercicio> entities = new ArrayList<>();
 		
-		NIFs.add(new NIF("DNI", "Documento Nacional de Identidad"));
-		NIFs.add(new NIF("CUIT", "Codigo Unico de Identificacion Tributaria"));
-		NIFs.add(new NIF("CI", "Cedula de Identidad"));
-		//NIFs.add(new NIF("", ""));
-		
+		entities.add(new Ejercicio("EjercicioA ","DescA "));
+		entities.add(new Ejercicio("EjercicioB ","DescB "));
+		entities.add(new Ejercicio("EjercicioC ","DescC "));
 		
 		System.out.println("PERSISTENCIA");
-		for(NIF nif : NIFs){
+		for(Ejercicio entity: entities){
 			System.out.print("Grabando...\t");
-			dao.grabar(nif);
-			System.out.println("Grabado! "+nif.toString());
+			dao.grabar(entity);
+			System.out.println("Grabado! "+entity.toString());
 		}
 		
 		
 		System.out.println("---------------------------------------------");
 		System.out.println("---------------------------------------------");
 		
-		NIFs=null;
+		entities=null;
 		
 		System.out.println("GET ALL");		
-		NIFs = dao.getAll();
-		System.out.println(NIFs.size() +" elementos encontrados:");
-		for(NIF nif : NIFs){
-			System.out.println(nif.toString());
+		entities = dao.getAll();
+		System.out.println(entities.size() +" elementos encontrados:");
+		for(Ejercicio entity : entities){
+			System.out.println(entity.toString());
 		}
 		System.out.println();
 		
@@ -48,8 +46,8 @@ public class testNIF {
 		Integer id = 2;
 		System.out.println("GET BY ID "+id);		
 		try {
-			NIF nif= dao.getById(id);
-			System.out.println("NIF con id "+id+" encontrado: "+ nif.toString());
+			Ejercicio entity= dao.getById(id);
+			System.out.println("Entidad con id "+id+" encontrada: "+ entity.toString());
 		} catch (ObjetoInexistenteException e) {
 			System.out.println(e.getLocalizedMessage()+ ":(");
 		}
@@ -57,7 +55,5 @@ public class testNIF {
 		System.out.println("FIN");
 		System.out.println("---------------------------------------------");
 		System.out.println("---------------------------------------------");
-		
-		testEjercicio.main(null);
 	}
 }

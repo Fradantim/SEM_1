@@ -13,17 +13,24 @@ public class EjercicioController {
 		return e;
 	}
 	
+	public void modificarEjercicio(Ejercicio ejercicio, String nuevoNombre, String nuevaDescripcion) {
+		ejercicio.setNombre(nuevoNombre);
+		ejercicio.setDescripcion(nuevaDescripcion);
+		daoEjercicio.grabar(ejercicio);
+	}
+	
 	public void modificarEjercicio(Integer id, String nuevoNombre, String nuevaDescripcion) throws ObjetoInexistenteException {
 		Ejercicio e = daoEjercicio.getById(id);
-		e.setNombre(nuevoNombre);
-		e.setDescripcion(nuevaDescripcion);
-		daoEjercicio.grabar(e);
+		modificarEjercicio(e, nuevoNombre, nuevaDescripcion);
 	}
 	
 	public void borrarEjercicio(Integer id) throws ObjetoInexistenteException {
 		Ejercicio e = daoEjercicio.getById(id);
-		daoEjercicio.grabar(e);
+		borrarEjercicio(e);
 	}
 	
+	public void borrarEjercicio(Ejercicio ejercicio) {
+		daoEjercicio.borrar(ejercicio);
+	}
 	
 }

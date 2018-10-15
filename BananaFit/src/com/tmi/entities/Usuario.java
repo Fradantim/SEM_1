@@ -9,9 +9,7 @@ import javax.persistence.Entity;
 import com.tmi.exceptions.SeSuperponenClases;
 
 @Entity
-public abstract class Usuario {
-	
-	protected Integer id;
+public abstract class Usuario extends AbsEntity{
 	
 	protected String nombre;
 
@@ -46,14 +44,6 @@ public abstract class Usuario {
 		this.rutinasCreadas = new ArrayList<>();
 		this.rutinasAsociadas = new ArrayList<>();
 		this.sesiones = new ArrayList<>();
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getUser() {

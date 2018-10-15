@@ -27,7 +27,7 @@ public class Dao<T extends AbsEntity> {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		session.beginTransaction();
-		session.saveOrUpdate(entity);
+		session.merge(entity);
 		session.getTransaction().commit();
 		session.close();
 		return entity.getId();
@@ -38,7 +38,7 @@ public class Dao<T extends AbsEntity> {
 		Session session = sf.openSession();
 		session.beginTransaction();
 		for(AbsEntity entity: entities)
-			session.saveOrUpdate(entity);
+			session.merge(entity);
 		session.getTransaction().commit();
 		session.close();
 	}

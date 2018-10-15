@@ -5,6 +5,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.tmi.entities.Ejercicio;
 import com.tmi.entities.NIF;
+import com.tmi.entities.Rutina;
 
 public class HibernateUtil
 {
@@ -17,15 +18,16 @@ public class HibernateUtil
         	 AnnotationConfiguration config = new AnnotationConfiguration();
              //config.addAnnotatedClass(ArticuloEntity.class);
         	 //TODO evaluar si se puede agregar dinamicamente las extensiones de Entity
-        	 //config.addAnnotatedClass(NIF.class);
+        	 config.addAnnotatedClass(NIF.class);
         	 config.addAnnotatedClass(Ejercicio.class);
-             //TODO Agregar todas las entities----
+        	 config.addAnnotatedClass(Rutina.class);
+             //TODO Agregar todas las entities ~~~~
              sessionFactory = config.buildSessionFactory();
         }
-        catch (Throwable ex)
+        catch (Exception e)
         {
-            System.err.println("Initial SessionFactory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
+            System.err.println("HibernateUtil: fallo la creacion de SessionFactory: " + e);
+            throw new ExceptionInInitializerError(e);
         }
     }
  

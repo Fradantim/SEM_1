@@ -3,10 +3,14 @@ package com.tmi.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.JoinColumn;;
 
 @Entity
 @Table(name="EJERCICIO")
@@ -18,7 +22,7 @@ public class Ejercicio extends AbsEntity{
 	@Column (name="DESCRIPCION", nullable=true)
 	private String descripcion;
 
-	@Transient
+	@ManyToMany(mappedBy = "ejercicios", cascade = {CascadeType.ALL},fetch=FetchType.LAZY)
 	private List<Rutina> rutinas;
 	
 	public Ejercicio() { }
