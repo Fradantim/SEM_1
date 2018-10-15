@@ -2,6 +2,7 @@ package com.tmi.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.tmi.dtos.RutinaDTO;
 
 @Entity
 @Table(name="RUTINA")
@@ -135,10 +138,17 @@ public class Rutina extends AbsEntity{
 	}
 	
 	public void agregarEjercicio (Ejercicio ejercicio) {
-		ejercicios.add(ejercicio);
+		if(!ejercicios.contains(ejercicio))
+			ejercicios.add(ejercicio);
 	}
 	
 	public void removerEjercicio (Ejercicio ejercicio) {
 		ejercicios.remove(ejercicio);
+	}
+	
+	public RutinaDTO toDTO() {
+		RutinaDTO dto =new RutinaDTO(nombre, descripcion, creador.getUser(), series, duracionEjercicio, publica); 
+		dto.setEjercicios(ejercicios.stream().map(Ejercicio::toDTO).collect(Collectors.toList()));
+		return dto;
 	}
 }

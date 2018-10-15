@@ -2,6 +2,7 @@ package com.tmi.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.tmi.dtos.ClaseDTO;
 import com.tmi.exceptions.DiaInexistenteException;
 import com.tmi.exceptions.LaSesionTieneCupoLlenoException;
 
@@ -82,7 +84,7 @@ public class Clase extends AbsEntity{
 		this.profesor = profesor;
 		this.dia = dia;
 		this.actividad = actividad;
-		this.setSala(sala);
+		this.sala=sala;
 	}	
 	
 	public Actividad getActividad() {
@@ -166,5 +168,11 @@ public class Clase extends AbsEntity{
 	 */
 	public int getMinutoFin() {
 		return minutoInicio+actividad.getDuracion();
+	}
+	
+	public ClaseDTO toDTO() {
+		ClaseDTO dto = new ClaseDTO(minutoInicio, profesor.getUser(), dia, actividad.toDTO(), sala.toDTO());
+		dto.setInscriptos(inscriptos.stream().map(Usuario::getUser).collect(Collectors.toList()));
+		return dto;
 	}
 }

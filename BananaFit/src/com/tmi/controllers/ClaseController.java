@@ -1,7 +1,11 @@
 package com.tmi.controllers;
 
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.tmi.daos.Dao;
+import com.tmi.dtos.ClaseDTO;
 import com.tmi.entities.Actividad;
 import com.tmi.entities.Clase;
 import com.tmi.entities.Profesor;
@@ -18,19 +22,24 @@ public class ClaseController {
 	private Dao<Actividad> actividadDao = new Dao<Actividad>(Actividad.class);
 	private Dao<Sala> salaDao = new Dao<Sala>(Sala.class);
 
-	public Clase altaClase(int minutoInicio, Profesor profesor, int dia, Actividad actividad, Sala sala) throws SeSuperponenClasesException {
+	public ClaseDTO altaClase(int minutoInicio, Profesor profesor, int dia, Actividad actividad, Sala sala) throws SeSuperponenClasesException {
 		Clase clase = new Clase(minutoInicio, profesor, dia, actividad, sala);
 		profesor.dictarClase(clase);
 		sala.asignarClase(clase);
 		claseDao.grabar(clase);
-		return clase;
+		return clase.toDTO();
 	}
+	;
 
-	public Clase altaClase(int minutoInicio, Integer idProfesor, int dia, Integer idActividad, Integer idSala) throws ObjetoInexistenteException, SeSuperponenClasesException {
+	public ClaseDTO altaClase(int minutoInicio, Integer idProfesor, int dia, Integer idActividad, Integer idSala) throws ObjetoInexistenteException, SeSuperponenClasesException {
 		Profesor profesor = profesorDao.getById(idProfesor);
 		Actividad actividad = actividadDao.getById(idActividad);
 		Sala sala = salaDao.getById(idSala);
 		return altaClase(minutoInicio, profesor, dia, actividad, sala);
+	}
+	
+	public List<ClaseDTO> getAll(){
+		return claseDao.getAll().stream().map(Clase::toDTO).collect(Collectors.toList());
 	}
 
 	public void agregarUsuario(Clase clase, Usuario usuario) throws LaSesionTieneCupoLlenoException, SeSuperponenClasesException {

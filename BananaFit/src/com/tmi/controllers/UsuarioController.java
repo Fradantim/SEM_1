@@ -5,16 +5,17 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.tmi.daos.Dao;
 import com.tmi.daos.UsuarioDao;
+import com.tmi.dtos.UsuarioDTO;
 import com.tmi.entities.Administrativo;
 import com.tmi.entities.Clase;
 import com.tmi.entities.Clase.Dia;
 import com.tmi.entities.NIF;
 import com.tmi.entities.Profesor;
 import com.tmi.entities.Rutina;
-import com.tmi.entities.Sala;
 import com.tmi.entities.Socio;
 import com.tmi.entities.Usuario;
 import com.tmi.entities.Usuario.TipoUsuario;
@@ -37,17 +38,17 @@ public class UsuarioController {
 		return Arrays.asList(TipoUsuario.values());
 	}
 	
-	public List<Usuario> findByAttrubutes(Map<String, Object> attributes, boolean inclusive){
-		return usuarioDao.findByAttributes(attributes, inclusive);
+	public List<UsuarioDTO> findByAttrubutes(Map<String, Object> attributes, boolean inclusive){
+		return usuarioDao.findByAttributes(attributes, inclusive).stream().map(Usuario::toDTO).collect(Collectors.toList());
 	}
 	
-	public Usuario altaUsuario(String user, String pass, Integer idTipoUsuario, String nombre, String apellido, String mail, boolean presentoAptoMedico, Integer idNIF, int nroNIF, String domicilio, String telefono ) throws ObjetoInexistenteException, YaExisteElUsuarioException, TipoDeUsuarioInexistenteException {
+	public UsuarioDTO altaUsuario(String user, String pass, Integer idTipoUsuario, String nombre, String apellido, String mail, boolean presentoAptoMedico, Integer idNIF, int nroNIF, String domicilio, String telefono ) throws ObjetoInexistenteException, YaExisteElUsuarioException, TipoDeUsuarioInexistenteException {
 		NIF NIF = NIFDao.getById(idNIF);
 		TipoUsuario tipoUsuario = Usuario.TipoUsuario.getById(idTipoUsuario);
 		return altaUsuario(user, pass, tipoUsuario, nombre, apellido, mail, presentoAptoMedico, NIF, nroNIF, domicilio, telefono);
 	}
 	
-	public Usuario altaUsuario(String user, String pass, TipoUsuario tipoUsuario, String nombre, String apellido, String mail, boolean presentoAptoMedico, NIF NIF, int nroNIF, String domicilio, String telefono ) throws YaExisteElUsuarioException, TipoDeUsuarioInexistenteException {
+	public UsuarioDTO altaUsuario(String user, String pass, TipoUsuario tipoUsuario, String nombre, String apellido, String mail, boolean presentoAptoMedico, NIF NIF, int nroNIF, String domicilio, String telefono ) throws YaExisteElUsuarioException, TipoDeUsuarioInexistenteException {
 		if(existeUsuario(user))
 			throw new YaExisteElUsuarioException("Ya existe un usuario con username "+user);
 		//sino ...
@@ -72,7 +73,7 @@ public class UsuarioController {
 		}
 		
 		usuarioDao.grabar(usuario);
-		return usuario;
+		return usuario.toDTO();
 	}
 	
 	public void actualizarAptoMedico(Integer idUsuario) throws ObjetoInexistenteException {
@@ -139,7 +140,7 @@ public class UsuarioController {
 		usuarioDao.borrar(usuario);
 	}
 
-	public List<Profesor> getProfesorDisponibles(Dia dia, int minuroInicio, int duracion) {
+	public List<UsuarioDTO> getProfesorDisponibles(Dia dia, int minuroInicio, int duracion) {
 		List<Profesor> result = new ArrayList<>();
 		Clase auxClase = new Clase(minuroInicio, null, dia.getId(), null, null);
 		for(Profesor profesor : profesorDao.getAll()) {
@@ -147,10 +148,10 @@ public class UsuarioController {
 				result.add(profesor);
 			}
 		}
-		return result;
+		return result.stream().map(Profesor::toDTO).collect(Collectors.toList());
 	}
 	
-	public List<Profesor> getProfesorDisponibles(Integer idDia, int minuroInicio, int duracion) throws DiaInexistenteException {
+	public List<UsuarioDTO> getProfesorDisponibles(Integer idDia, int minuroInicio, int duracion) throws DiaInexistenteException {
 		Dia dia = Dia.getById(idDia);
 		return getProfesorDisponibles(dia, minuroInicio, duracion);
 	}

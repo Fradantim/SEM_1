@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.tmi.dtos.SalaDTO;
 import com.tmi.exceptions.SeSuperponenClasesException;
 
 @Entity
@@ -89,5 +90,9 @@ public class Sala extends AbsEntity{
 			throw new SeSuperponenClasesException("La clase que se desea asignar a la sala "+ id +" se superone a otra clase");
 		}
 		clases.add(sesion);
+	}
+	
+	public SalaDTO toDTO() {
+		return new SalaDTO(nombre, capacidad);
 	}
 }

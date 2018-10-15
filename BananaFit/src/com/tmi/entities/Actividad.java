@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.tmi.dtos.ActividadDTO;
+
 @Entity
 @Table(name="ACTIVIDAD")
 public class Actividad extends AbsEntity{
@@ -85,5 +87,8 @@ public class Actividad extends AbsEntity{
 	    if(otherMyClass.getId()== this.getId()) return true;
 	    return false;
 	}
-	
+
+	public ActividadDTO toDTO () {
+		return new ActividadDTO(nombre, duracion, descripcion);
+	}
 }

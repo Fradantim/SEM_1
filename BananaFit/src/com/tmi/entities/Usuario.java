@@ -3,6 +3,7 @@ package com.tmi.entities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,8 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
+import com.tmi.dtos.UsuarioDTO;
 import com.tmi.exceptions.SeSuperponenClasesException;
 import com.tmi.exceptions.TipoDeUsuarioInexistenteException;
 
@@ -281,5 +282,13 @@ public abstract class Usuario extends AbsEntity{
 
 	public void setDomicilio(String direccion) {
 		this.domicilio = direccion;
+	}
+	
+	public UsuarioDTO toDTO() {
+		UsuarioDTO dto = new UsuarioDTO(nombre, apellido, mail, ultAptoMedico, user, pass, nif.toDTO(), nroNIF, telefono, domicilio);
+		dto.setClases(clases.stream().map(Clase::toDTO).collect(Collectors.toList()));
+		dto.setRutinasAsociadas(rutinasAsociadas.stream().map(Rutina::toDTO).collect(Collectors.toList()));
+		dto.setRutinasCreadas(rutinasCreadas.stream().map(Rutina::toDTO).collect(Collectors.toList()));
+		return dto;
 	}
 }

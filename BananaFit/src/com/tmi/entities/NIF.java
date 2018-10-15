@@ -8,6 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.tmi.dtos.NIFDTO;
+
 @Entity
 @Table(name="NIF")
 public class NIF extends AbsEntity{
@@ -62,4 +64,7 @@ public class NIF extends AbsEntity{
 	    return false;
 	}
 	
+	public NIFDTO toDTO() {
+		return new NIFDTO(sigla, descripcion);
+	}
 }

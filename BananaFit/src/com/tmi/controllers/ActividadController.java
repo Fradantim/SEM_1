@@ -2,8 +2,10 @@ package com.tmi.controllers;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.tmi.daos.Dao;
+import com.tmi.dtos.ActividadDTO;
 import com.tmi.entities.Actividad;
 import com.tmi.exceptions.ObjetoInexistenteException;
 
@@ -11,14 +13,14 @@ public class ActividadController {
 	private Dao<Actividad> actividadDao = new Dao<Actividad>(Actividad.class);
 
 
-	public Actividad altaActividad(String nombre, int duracion, String descripcion) {
+	public ActividadDTO altaActividad(String nombre, int duracion, String descripcion) {
 		Actividad actividad = new Actividad(nombre, duracion, descripcion);
 		actividadDao.grabar(actividad);
-		return actividad;
+		return actividad.toDTO();
 	}
 	
-	public List<Actividad> getAll() {
-		return actividadDao.getAll();
+	public List<ActividadDTO> getAll() {
+		return actividadDao.getAll().stream().map(Actividad::toDTO).collect(Collectors.toList());
 	}
 	
 	public void modificarActividad(Actividad actividad, String nombre, int duracion, String descripcion) {

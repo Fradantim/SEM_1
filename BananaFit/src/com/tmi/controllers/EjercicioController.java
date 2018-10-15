@@ -1,16 +1,24 @@
 package com.tmi.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.tmi.daos.Dao;
+import com.tmi.dtos.EjercicioDTO;
 import com.tmi.entities.Ejercicio;
 import com.tmi.exceptions.ObjetoInexistenteException;
 
 public class EjercicioController {
 	private Dao<Ejercicio> ejercicioDao = new Dao<Ejercicio>(Ejercicio.class);
 	
-	public Ejercicio altaEjercicio(String nombre, String descripcion) {
+	public EjercicioDTO altaEjercicio(String nombre, String descripcion) {
 		Ejercicio e = new Ejercicio(nombre, descripcion);
 		ejercicioDao.grabar(e);
-		return e;
+		return e.toDTO();
+	}
+	
+	public List<EjercicioDTO> getAll() {
+		return ejercicioDao.getAll().stream().map(Ejercicio::toDTO).collect(Collectors.toList());
 	}
 	
 	public void modificarEjercicio(Ejercicio ejercicio, String nuevoNombre, String nuevaDescripcion) {
