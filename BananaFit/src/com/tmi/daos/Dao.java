@@ -13,15 +13,19 @@ import org.hibernate.Session;
 
 public class Dao<T extends AbsEntity> {
 	
-	private Class<T> type;
+	protected Class<T> type;
 	
 	public Dao (Class<T> type){
 		this.type = type;
 	}
 
-	private String getClassName() {
+	protected Dao() {}
+	
+	protected String getClassName() {
 		return type.getSimpleName();
 	}
+	
+	
 	
 	public Integer grabar(AbsEntity entity){
 		SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -63,7 +67,6 @@ public class Dao<T extends AbsEntity> {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<T> getAll() {
-		System.out.println(getClassName());
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		List<T> list = session.createQuery("from "+getClassName()).list();

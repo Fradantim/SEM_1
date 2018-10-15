@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
-import com.tmi.exceptions.SeSuperponenClases;
+import com.tmi.exceptions.SeSuperponenClasesException;
 
 @Entity
 public class Sala {
@@ -84,9 +84,9 @@ public class Sala {
 		return true;
 	}
 	
-	public void asignarSesion(Clase sesion) throws SeSuperponenClases {
+	public void asignarSesion(Clase sesion) throws SeSuperponenClasesException {
 		if(!puedeAsignarseSesion(sesion)) {
-			throw new SeSuperponenClases("La sesion que se desea asignar a la sala "+ id +" se superone a otra clase");
+			throw new SeSuperponenClasesException("La sesion que se desea asignar a la sala "+ id +" se superone a otra clase");
 		}
 		sesiones.add(sesion);
 	}

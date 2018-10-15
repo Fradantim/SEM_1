@@ -10,12 +10,14 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
+@Table(name="RUTINA")
 public class Rutina extends AbsEntity{
 
-	@Column (name="NOMBRE", unique=true)
+	@Column (name="NOMBRE", nullable=true)
 	private String nombre;
 	
 	@Column (name="DESCRIPCION", nullable=true)
@@ -38,7 +40,7 @@ public class Rutina extends AbsEntity{
 	private List<Ejercicio> ejercicios;
 	
 	@Transient //TODO hacer mapeo
-	private List<Usuario> personas;
+	private List<Usuario> usuarios;
 
 	public Rutina() { }
 	
@@ -50,7 +52,7 @@ public class Rutina extends AbsEntity{
 		this.series = series;
 		this.duracionEjercicio = duracionEjercicio;
 		this.ejercicios = new ArrayList<>();
-		this.personas = new ArrayList<>();
+		this.usuarios = new ArrayList<>();
 	}
 
 	public String getNombre() {
@@ -101,12 +103,12 @@ public class Rutina extends AbsEntity{
 		this.ejercicios = ejercicios;
 	}
 
-	public List<Usuario> getPersonas() {
-		return personas;
+	public List<Usuario> getUsuarios() {
+		return usuarios;
 	}
 
-	public void setPersonas(List<Usuario> personas) {
-		this.personas = personas;
+	public void setUsuarios(List<Usuario> personas) {
+		this.usuarios = personas;
 	}
 	
 	@Override

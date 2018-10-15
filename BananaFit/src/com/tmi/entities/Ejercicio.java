@@ -7,16 +7,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.JoinColumn;;
 
 @Entity
 @Table(name="EJERCICIO")
 public class Ejercicio extends AbsEntity{
 	
-	@Column (name="NOMBRE", unique=true)
+	@Column (name="NOMBRE", nullable=true)
 	private String nombre;
 	
 	@Column (name="DESCRIPCION", nullable=true)

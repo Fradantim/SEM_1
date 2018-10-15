@@ -2,7 +2,6 @@ package com.tmi.entities;
 
 import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -35,7 +34,7 @@ public abstract class AbsEntity {
 		try {
 		for (Method method : this.getClass().getMethods()) {
 			if(method.getName().startsWith("get") && method.getParameterTypes().length==0 && isAllowedType(method.getReturnType()))
-		         out+="\n\t"+method.getName()+": "+String.valueOf(method.invoke(this))+"; ";
+		         out+="\t"+method.getName()+": "+String.valueOf(method.invoke(this))+";\n";
 		}
 		}
 		catch (Exception e) { ; }

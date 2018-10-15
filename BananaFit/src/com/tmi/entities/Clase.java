@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
-import com.tmi.exceptions.LaSesionTieneCupoLleno;
+import com.tmi.exceptions.LaSesionTieneCupoLlenoException;
 
 @Entity
 public class Clase {
@@ -111,9 +111,9 @@ public class Clase {
 	    return false;
 	}
 	
-	public void inscribirPersona(Usuario persona) throws LaSesionTieneCupoLleno {
+	public void inscribirPersona(Usuario persona) throws LaSesionTieneCupoLlenoException {
 		if (inscriptos.size()==sala.getCapacidad()) {
-			throw new LaSesionTieneCupoLleno("La Sesion "+ id + " de la Clase "+ actividad.getId()+" ya posee el cupo completo.");
+			throw new LaSesionTieneCupoLlenoException("La Sesion "+ id + " de la Clase "+ actividad.getId()+" ya posee el cupo completo.");
 		} else {
 			inscriptos.add(persona);
 		}

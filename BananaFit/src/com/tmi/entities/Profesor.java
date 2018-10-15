@@ -4,28 +4,33 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
-import com.tmi.exceptions.SeSuperponenClases;
+import com.tmi.exceptions.SeSuperponenClasesException;
 
 @Entity
+@DiscriminatorValue("PROFESOR")
 public class Profesor extends Usuario{
 
-	private List<Clase> sesionesDictadas;
+	@Transient //TODO ARMAR MAPEO
+	private List<Clase> clasesDictadas;
 
 	public Profesor() {}
 	
-	public Profesor(String nombre, Date ultimaPresentacionAptaMedica, String user, String pass, NIF nif, int nroNIF) {
-		super(nombre, ultimaPresentacionAptaMedica, user, pass, nif, nroNIF);
-		sesionesDictadas= new ArrayList<>();
+	public Profesor(String nombre, String apellido, String mail, Date ultimaPresentacionAptaMedica, String user, String pass, NIF nif, int nroNIF,String telefono, String domicilio) {
+		super(nombre, apellido, mail, ultimaPresentacionAptaMedica, user, pass, nif, nroNIF,telefono, domicilio);
+		this.tipo=TipoUsuario.PROFESOR.getNombre();
+		clasesDictadas= new ArrayList<>();
+	}
+	
+	public List<Clase> getClasesDictadas() {
+		return clasesDictadas;
 	}
 
-	public List<Clase> getSesionesDictadas() {
-		return sesionesDictadas;
-	}
-
-	public void setSesionesDictadas(List<Clase> sesionesDictadas) {
-		this.sesionesDictadas = sesionesDictadas;
+	public void setClasesDictadas(List<Clase> sesionesDictadas) {
+		this.clasesDictadas = sesionesDictadas;
 	}
 	
 	@Override
@@ -38,17 +43,17 @@ public class Profesor extends Usuario{
 	    return false;
 	}
 	
-	public void asignarClase(Clase sesion) throws SeSuperponenClases {
+	public void asignarClase(Clase sesion) throws SeSuperponenClasesException {
 		if(!puedeAsistirALaClase(sesion)) {
-			throw new SeSuperponenClases("La sesion "+sesion.getId() +" que se desea asignar al docente "+ id +" se superone a otra clase");
+			throw new SeSuperponenClasesException("La sesion "+sesion.getId() +" que se desea asignar al docente "+ id +" se superone a otra clase");
 		}
 		
-		sesionesDictadas.add(sesion);
+		clasesDictadas.add(sesion);
 	}
 	
 	@Override
 	public boolean puedeAsistirALaClase(Clase sesion) {
-		for(Clase clase: sesionesDictadas) {
+		for(Clase clase: clasesDictadas) {
 			if(sesion.getDia()==clase.getDia()) {
 				//Si empieza durante otra clase que ya da
 				if(sesion.getMinutoInicio()>=clase.getMinutoInicio() && sesion.getMinutoInicio()<=clase.getMinutoFin())
@@ -62,7 +67,7 @@ public class Profesor extends Usuario{
 			}
 		}
 		
-		for(Clase clase: sesiones) {
+		for(Clase clase: clases) {
 			if(sesion.getDia()==clase.getDia()) {
 				//Si empieza durante otra clase que ya da
 				if(sesion.getMinutoInicio()>=clase.getMinutoInicio() && sesion.getMinutoInicio()<=clase.getMinutoFin())

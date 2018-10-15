@@ -1,7 +1,11 @@
 package com.tmi.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -13,6 +17,9 @@ public class NIF extends AbsEntity{
 	
 	@Column (name="DESCRIPCION", nullable=true)
 	private String descripcion;
+	
+	@OneToMany(mappedBy = "nif",fetch=FetchType.LAZY)
+	private List<Usuario> usuarios;
 	
 	public NIF() { }
 	
@@ -35,6 +42,14 @@ public class NIF extends AbsEntity{
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 	
 	@Override
