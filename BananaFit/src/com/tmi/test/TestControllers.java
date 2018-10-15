@@ -2,17 +2,16 @@ package com.tmi.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.tmi.controllers.EjercicioController;
 import com.tmi.controllers.RutinaController;
 import com.tmi.controllers.UsuarioController;
 import com.tmi.daos.Dao;
-import com.tmi.entities.Ejercicio;
 import com.tmi.entities.NIF;
-import com.tmi.entities.Rutina;
 import com.tmi.entities.Usuario;
-import com.tmi.entities.Usuario.TipoUsuario;
 import com.tmi.exceptions.ObjetoInexistenteException;
 import com.tmi.exceptions.TipoDeUsuarioInexistenteException;
 import com.tmi.exceptions.YaExisteElUsuarioException;
@@ -20,6 +19,15 @@ import com.tmi.exceptions.YaExisteElUsuarioException;
 public class TestControllers {
 	
 	public static void main (String[] args) throws ObjetoInexistenteException, YaExisteElUsuarioException, TipoDeUsuarioInexistenteException {
+		
+		
+		/*
+		LAMBDA
+		List<String> namesList = personList.stream()
+                                   .map(Person::getName)
+                                   .collect(Collectors.toList());
+	
+		 */
 		EjercicioController ec = new EjercicioController();
 		RutinaController rc = new RutinaController();
 		UsuarioController uc = new UsuarioController();
@@ -92,9 +100,9 @@ public class TestControllers {
 		
 		System.out.println("PERSISTENCIA RUTINAS");
 		
-		rc.altaRutina(1, "Rut A", "Desc Rut A", 4, 40);
-		rc.altaRutina(1, "Rut B", "Desc Rut B", 4, 40);
-		rc.altaRutina(1, "Rut C", "Desc Rut C", 4, 40);
+		rc.altaRutina(1, "Rut A", "Desc Rut A", 4, 40,true);
+		rc.altaRutina(1, "Rut B", "Desc Rut B", 4, 40,false);
+		rc.altaRutina(1, "Rut C", "Desc Rut C", 4, 40,true);
 		
 		System.out.println("---------------------------------------------");
 		System.out.println("---------------------------------------------");
@@ -109,15 +117,6 @@ public class TestControllers {
 		rc.agregarEjercicio(2, 6);
 		rc.asignarEjercicios(3, Arrays.asList(new Integer[] {1,2,3,4,5,6,7}) );
 		
-
-		System.out.println("---------------------------------------------");
-		System.out.println("---------------------------------------------");
-		
-		Usuario user = new Dao<Usuario>(Usuario.class).getById(2);
-		
-		uc.modificarUsuario(user, user.getPass(), TipoUsuario.ADMINISTRATIVO, user.getNombre(), user.getApellido(), user.getMail(), user.getNif(), user.getNroNIF(), user.getDomicilio(), user.getTelefono());
-		System.out.println("modificado");
-		
 		/*
 		System.out.println("Ejercicios -------------");
 		for(Ejercicio ej: new Dao<Ejercicio> (Ejercicio.class).getAll()) {
@@ -131,10 +130,42 @@ public class TestControllers {
 			System.out.println("\t-------------");
 		}
 		*/
-		//System.out.println(new Dao<Ejercicio> (Ejercicio.class).getAll().size());
+
+		System.out.println("---------------------------------------------");
+		System.out.println("---------------------------------------------");
+		
+		System.out.println("ASIGNACION USUARIO-RUTINAS");
+		
+		uc.asociarRutina(2, 1);	
+		uc.asociarRutina(2, 2);
+		uc.asociarRutina(3, 2);
+		uc.asociarRutina(3, 3);
+		uc.asociarRutina(4, Arrays.asList(new Integer[] {1,2,3}));
+		
+		System.out.println("---------------------------------------------");
+		System.out.println("---------------------------------------------");
+		
+		/*
+		System.out.println("TEST BUSQUEDA POR PARAMETROS");
+		Map<String, Object> params = new HashMap<>();
+		params.put("nombre", "Ma");
+		params.put("apellido", "Brabermoin");
+		
+		System.out.println("INCLUSIVES:");
+		for(Usuario usuario: uc.findByAttrubutes(params, true)) {
+			System.out.println(usuario.toString());
+		}
+		System.out.println("EXCLUSIVES:");
+		for(Usuario usuario: uc.findByAttrubutes(params, false)) {
+			System.out.println(usuario.toString());
+		}
+		
+		System.out.println("---------------------------------------------");
+		System.out.println("---------------------------------------------");
+		*/
 		
 		
-		//ASIGNAR USUARIOS - RUTINAS
+		
 	}
 	
 }

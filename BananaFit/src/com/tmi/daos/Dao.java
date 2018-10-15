@@ -8,6 +8,9 @@ import com.tmi.hbt.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import org.hibernate.Query;
 
 import org.hibernate.Session;
 
@@ -24,8 +27,6 @@ public class Dao<T extends AbsEntity> {
 	protected String getClassName() {
 		return type.getSimpleName();
 	}
-	
-	
 	
 	public Integer grabar(AbsEntity entity){
 		SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -59,6 +60,53 @@ public class Dao<T extends AbsEntity> {
 		}
 		else 
 			throw new ObjetoInexistenteException("No existe un "+getClassName()+" con id "+ id);
+	}
+	
+	/**
+	 * Si no encuentra elementos devuelve una lista vacia
+	 * */
+	@SuppressWarnings("unchecked")
+	public List<T> findByAttributes(Map<String,Object> attributes, boolean inclusive) {
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		String stringQuery = "from "+getClassName(); 
+		
+		String conector;
+		if(inclusive) {
+			conector="AND";
+		} else {
+			conector="OR";
+		}
+		
+		if(attributes.size()>0) {
+			stringQuery+=" where";
+			for(String key: attributes.keySet()) {
+				if(attributes.get(key) instanceof String) {
+					stringQuery+=" "+key+" like :"+key+" "+conector;
+				} else {
+					stringQuery+=" "+key+" = :"+key+" "+conector;
+				}
+				
+			}
+			//saco el ultimo " AND" / " OR"
+			stringQuery=stringQuery.substring(0, stringQuery.length() - (conector.length()+1) );
+		}
+		
+		Query query = session.createQuery(stringQuery);
+		
+		for(String key: attributes.keySet()) {
+			if(attributes.get(key) instanceof String) {
+				query.setParameter(key, "%"+attributes.get(key)+"%");
+			} else {
+				query.setParameter(key, attributes.get(key));
+			}
+		}
+
+		List <T> result = query.list();
+		if(result == null){
+			result = new ArrayList<>();
+		}
+		return result;
 	}
 	
 	/**

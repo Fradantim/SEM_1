@@ -1,26 +1,58 @@
 package com.tmi.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.tmi.daos.Dao;
+import com.tmi.daos.RutinaDao;
 import com.tmi.entities.Ejercicio;
 import com.tmi.entities.Rutina;
 import com.tmi.entities.Usuario;
 import com.tmi.exceptions.ObjetoInexistenteException;
 
 public class RutinaController {
-	private Dao<Rutina> rutinaDao= new Dao<Rutina>(Rutina.class);
+	private RutinaDao rutinaDao= new RutinaDao();
 	private Dao<Usuario> usuarioDao= new Dao<Usuario>(Usuario.class);
 	private Dao<Ejercicio> ejercicioDao= new Dao<Ejercicio>(Ejercicio.class);
 	
-	public Rutina altaRutina(Integer idUserCreador, String nombre, String descripcion, int series, int duracionEjercicio) throws ObjetoInexistenteException {
-		Usuario user = usuarioDao.getById(idUserCreador);
-		return altaRutina(user, nombre, descripcion, series, duracionEjercicio);
+	public List<Rutina> getRutinasPublicas(Map<String, Object> attributes, boolean inclusive){
+		if(attributes==null) {
+			attributes= new HashMap<>();
+		}
+		return rutinaDao.findRutinasPublicasByAttributes(attributes, inclusive);
 	}
 	
-	public Rutina altaRutina(Usuario userCreador, String nombre, String descripcion, int series, int duracionEjercicio) {
-		Rutina r= new Rutina(nombre, descripcion, userCreador, series, duracionEjercicio);
+	public List<Rutina> getRutinasCreadas(Usuario usuario){
+		return usuario.getRutinasCreadas();
+	}
+	
+	public List<Rutina> getRutinasCreadas(Integer idUsuario) throws ObjetoInexistenteException{
+		Usuario usuario = usuarioDao.getById(idUsuario);
+		return getRutinasCreadas(usuario);
+	}
+	
+	public List<Rutina> getRutinasAsociadas(Usuario usuario) {
+		return usuario.getRutinasAsociadas();
+	}
+	
+	public List<Rutina> getRutinasAsociadas(Integer idUsuario) throws ObjetoInexistenteException{
+		Usuario usuario = usuarioDao.getById(idUsuario);
+		return getRutinasAsociadas(usuario);
+	}
+	
+	
+	
+	
+	
+	public Rutina altaRutina(Integer idUserCreador, String nombre, String descripcion, int series, int duracionEjercicio, Boolean publica) throws ObjetoInexistenteException {
+		Usuario user = usuarioDao.getById(idUserCreador);
+		return altaRutina(user, nombre, descripcion, series, duracionEjercicio,publica);
+	}
+	
+	public Rutina altaRutina(Usuario userCreador, String nombre, String descripcion, int series, int duracionEjercicio, Boolean publica) {
+		Rutina r= new Rutina(nombre, descripcion, userCreador, series, duracionEjercicio,publica);
 		rutinaDao.grabar(r);
 		return r;
 	}

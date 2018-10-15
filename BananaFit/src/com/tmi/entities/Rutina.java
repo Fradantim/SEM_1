@@ -10,8 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name="RUTINA")
@@ -23,7 +23,11 @@ public class Rutina extends AbsEntity{
 	@Column (name="DESCRIPCION", nullable=true)
 	private String descripcion;
 	
-	@Transient //TODO hacer mapeo
+	@Column (name="PUBLICA", nullable=true)
+	private Boolean publica;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="USER_CREADOR_ID")
 	private Usuario creador;
 	
 	@Column (name="SERIES", nullable=true)
@@ -33,24 +37,25 @@ public class Rutina extends AbsEntity{
 	private int duracionEjercicio;
 	
 	@ManyToMany(cascade = {CascadeType.ALL},fetch=FetchType.LAZY)
-    @JoinTable(name = "EJERCICIO_RUTINA",
+    @JoinTable(name = "RUTINA_EJERCICIO",
     	joinColumns = @JoinColumn(name = "RUTINA_ID"),
     	inverseJoinColumns = @JoinColumn(name = "EJERCICIO_ID")
     	)
 	private List<Ejercicio> ejercicios;
 	
-	@Transient //TODO hacer mapeo
+	@ManyToMany(mappedBy = "rutinasAsociadas", cascade = {CascadeType.ALL},fetch=FetchType.LAZY)
 	private List<Usuario> usuarios;
 
 	public Rutina() { }
 	
-	public Rutina(String nombre, String descripcion, Usuario creador, int series, int duracionEjercicio) {
+	public Rutina(String nombre, String descripcion, Usuario creador, int series, int duracionEjercicio, Boolean publica) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.creador = creador;
 		this.series = series;
 		this.duracionEjercicio = duracionEjercicio;
+		this.publica=publica;
 		this.ejercicios = new ArrayList<>();
 		this.usuarios = new ArrayList<>();
 	}
@@ -109,6 +114,14 @@ public class Rutina extends AbsEntity{
 
 	public void setUsuarios(List<Usuario> personas) {
 		this.usuarios = personas;
+	}
+	
+	public Boolean getPublica() {
+		return publica;
+	}
+
+	public void setPublica(Boolean publica) {
+		this.publica = publica;
 	}
 	
 	@Override
