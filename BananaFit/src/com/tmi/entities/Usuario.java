@@ -60,7 +60,7 @@ public abstract class Usuario extends AbsEntity{
 	@Column (name="APELLIDO", nullable=true)
 	protected String apellido;
 
-	@Column (name="MAIl", nullable=true)
+	@Column (name="MAIL", nullable=true)
 	protected String mail;
 
 	@Column (name="ULTIMO_APTO_MEDICO", nullable=true)
@@ -85,7 +85,11 @@ public abstract class Usuario extends AbsEntity{
     	)
 	protected List<Rutina> rutinasAsociadas;
 	
-	@Transient //TODO Mapear cuando se haga entidad Clase
+	@ManyToMany(cascade = {CascadeType.ALL},fetch=FetchType.LAZY)
+    @JoinTable(name = "USUARIO_CLASE",
+    	joinColumns = @JoinColumn(name = "USUARIO_ID"),
+    	inverseJoinColumns = @JoinColumn(name = "CLASE_ID")
+    	)
 	protected List<Clase> clases;
 	
 	@Column (name="NRO_NIF", nullable=true)

@@ -6,32 +6,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tmi.controllers.ActividadController;
+import com.tmi.controllers.ClaseController;
 import com.tmi.controllers.EjercicioController;
 import com.tmi.controllers.RutinaController;
+import com.tmi.controllers.SalaController;
 import com.tmi.controllers.UsuarioController;
 import com.tmi.daos.Dao;
 import com.tmi.entities.NIF;
 import com.tmi.entities.Usuario;
+import com.tmi.exceptions.LaSesionTieneCupoLlenoException;
 import com.tmi.exceptions.ObjetoInexistenteException;
+import com.tmi.exceptions.SeSuperponenClasesException;
 import com.tmi.exceptions.TipoDeUsuarioInexistenteException;
 import com.tmi.exceptions.YaExisteElUsuarioException;
 
 public class TestControllers {
 	
-	public static void main (String[] args) throws ObjetoInexistenteException, YaExisteElUsuarioException, TipoDeUsuarioInexistenteException {
-		
+	public static void main (String[] args) throws ObjetoInexistenteException, YaExisteElUsuarioException, TipoDeUsuarioInexistenteException, SeSuperponenClasesException, LaSesionTieneCupoLlenoException {
 		
 		/*
 		LAMBDA
 		List<String> namesList = personList.stream()
                                    .map(Person::getName)
                                    .collect(Collectors.toList());
-	
 		 */
+		
 		EjercicioController ec = new EjercicioController();
 		RutinaController rc = new RutinaController();
 		UsuarioController uc = new UsuarioController();
 		Dao<NIF> daoNIF = new Dao<NIF>(NIF.class);
+		ClaseController cc = new ClaseController();
+		ActividadController ac = new ActividadController();
+		SalaController sc = new SalaController();
 		
 		System.out.println("PERSISTENCIA NIFs");
 		List<NIF> NIFs = new ArrayList<>();
@@ -74,11 +81,16 @@ public class TestControllers {
 		uc.altaUsuario("1028898", "1028898", 1, "Lucio", "Tzikas", "ltzikas@uade.edu.ar", true, 1, 0, "", "");
 		uc.altaUsuario("1040787", "1040787", 1, "Braian Ezequiel", "Venieri", "bvenieri@uade.edu.ar", true, 1, 0, "", "");
 		
-		uc.altaUsuario("adminA", "1234", 1, "ANombre A", "AApellido A", "AMAIL A", false, 1, 12345678, "ADomicilio A", "ATelefono A");
-		uc.altaUsuario("adminB", "1234", 1, "ANombre B", "AApellido B", "AMAIL B", false, 1, 12345678, "ADomicilio B", "ATelefono B");
-		uc.altaUsuario("adminC", "1234", 1, "ANombre C", "AApellido C", "AMAIL C", false, 1, 12345678, "ADomicilio C", "ATelefono C");
-		uc.altaUsuario("adminD", "1234", 1, "ANombre D", "AApellido D", "AMAIL D", false, 1, 12345678, "ADomicilio D", "ATelefono D");
-		uc.altaUsuario("adminE", "1234", 1, "ANombre E", "AApellido E", "AMAIL E", false, 1, 12345678, "ADomicilio E", "ATelefono E");
+		uc.altaUsuario("adminA", "1234", 3, "ANombre A", "AApellido A", "AMAIL A", false, 1, 12345678, "ADomicilio A", "ATelefono A");
+		uc.altaUsuario("adminB", "1234", 3, "ANombre B", "AApellido B", "AMAIL B", false, 1, 12345678, "ADomicilio B", "ATelefono B");
+		uc.altaUsuario("adminC", "1234", 3, "ANombre C", "AApellido C", "AMAIL C", false, 1, 12345678, "ADomicilio C", "ATelefono C");
+		uc.altaUsuario("adminD", "1234", 3, "ANombre D", "AApellido D", "AMAIL D", false, 1, 12345678, "ADomicilio D", "ATelefono D");
+		uc.altaUsuario("adminE", "1234", 3, "ANombre E", "AApellido E", "AMAIL E", false, 1, 12345678, "ADomicilio E", "ATelefono E");
+		
+		uc.altaUsuario("profA", "1234", 2, "PNombre A", "PApellido A", "PMAIL A", false, 1, 12345678, "PDomicilio A", "PTelefono A");
+		uc.altaUsuario("profB", "1234", 2, "PNombre B", "PApellido B", "PMAIL B", false, 1, 12345678, "PDomicilio B", "PTelefono B");
+		uc.altaUsuario("profC", "1234", 2, "PNombre C", "PApellido C", "PMAIL C", false, 1, 12345678, "PDomicilio C", "PTelefono C");
+		uc.altaUsuario("profD", "1234", 2, "PNombre D", "PApellido D", "PMAIL D", false, 1, 12345678, "PDomicilio D", "PTelefono D");
 		
 		System.out.println("---------------------------------------------");
 		System.out.println("---------------------------------------------");
@@ -164,7 +176,61 @@ public class TestControllers {
 		System.out.println("---------------------------------------------");
 		*/
 		
+		System.out.println("PERSISTENCIA ACTIVIDAD");
+
+		ac.altaActividad("Actividad A", 100, "Desc Act A");
+		ac.altaActividad("Actividad B", 100, "Desc Act B");
+		ac.altaActividad("Actividad C", 100, "Desc Act C");
+		ac.altaActividad("Actividad D", 100, "Desc Act D");
+		ac.altaActividad("Actividad E", 100, "Desc Act E");
+		ac.altaActividad("Actividad F", 100, "Desc Act F");
+		ac.altaActividad("Actividad G", 100, "Desc Act G");
 		
+		System.out.println("---------------------------------------------");
+		System.out.println("---------------------------------------------");
+		
+		System.out.println("PERSISTENCIA SALAS");
+
+		sc.altaSala("Sala A", 20);
+		sc.altaSala("Sala B", 20);
+		sc.altaSala("Sala C", 20);
+		sc.altaSala("Sala D", 20);
+		sc.altaSala("Sala E", 20);
+		sc.altaSala("Sala F", 20);
+		sc.altaSala("Sala G", 20);
+		
+		System.out.println("---------------------------------------------");
+		System.out.println("---------------------------------------------");
+		
+		System.out.println("PERSISTENCIA CLASES");
+
+		//del 29 al 32 son profes si no se tocó el alta de usuarios
+		cc.altaClase(600, 30, 1, 1, 1);
+		cc.altaClase(600, 31, 1, 2, 2);
+		cc.altaClase(600, 30, 2, 2, 3);
+		cc.altaClase(600, 31, 2, 2, 1);
+		
+		System.out.println("---------------------------------------------");
+		System.out.println("---------------------------------------------");
+				
+		System.out.println("ASIGNACION USUARIO-CLASE");
+		
+		cc.agregarUsuario(1, 1);
+		cc.agregarUsuario(1, 2);
+		cc.agregarUsuario(1, 3);
+		cc.agregarUsuario(1, 4);
+		cc.agregarUsuario(1, 5);
+				
+		System.out.println("---------------------------------------------");
+		System.out.println("---------------------------------------------");
+		
+		
+		
+		
+		
+		//ABM ACTIVIDAD
+		//ABM SALAS
+		//ABM CLASES!
 		
 	}
 	

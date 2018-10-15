@@ -3,34 +3,34 @@ package com.tmi.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.tmi.exceptions.SeSuperponenClasesException;
 
 @Entity
-public class Sala {
+@Table(name="SALA")
+public class Sala extends AbsEntity{
 
-	private Integer id;
+	public Sala() {	}
 	
+	@Column (name="NOMBRE", nullable=true)
 	private String nombre;
 	
+	@Column (name="CAPACIDAD", nullable=true)
 	private int capacidad;
 	
-	private List<Clase> sesiones;
+	@OneToMany(mappedBy = "sala",fetch=FetchType.LAZY)
+	private List<Clase> clases;
 	
 	public Sala(String nombre, int capacidad) {
 		super();
 		this.nombre = nombre;
 		this.capacidad = capacidad;
-		this.sesiones = new ArrayList<>();
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
+		this.clases = new ArrayList<>();
 	}
 
 	public String getNombre() {
@@ -50,11 +50,11 @@ public class Sala {
 	}
 
 	public List<Clase> getSesiones() {
-		return sesiones;
+		return clases;
 	}
 
-	public void setSesiones(List<Clase> sesiones) {
-		this.sesiones = sesiones;
+	public void setSesiones(List<Clase> clases) {
+		this.clases = clases;
 	}
 
 	@Override
@@ -67,8 +67,8 @@ public class Sala {
 	    return false;
 	}
 	
-	public boolean puedeAsignarseSesion (Clase sesion) {
-		for(Clase clase: sesiones) {
+	public boolean puedeAsignarseClase (Clase sesion) {
+		for(Clase clase: clases) {
 			if(sesion.getDia()==clase.getDia()) {
 				//Si empieza durante otra clase que ya da
 				if(sesion.getMinutoInicio()>=clase.getMinutoInicio() && sesion.getMinutoInicio()<=clase.getMinutoFin())
@@ -84,10 +84,10 @@ public class Sala {
 		return true;
 	}
 	
-	public void asignarSesion(Clase sesion) throws SeSuperponenClasesException {
-		if(!puedeAsignarseSesion(sesion)) {
-			throw new SeSuperponenClasesException("La sesion que se desea asignar a la sala "+ id +" se superone a otra clase");
+	public void asignarClase(Clase sesion) throws SeSuperponenClasesException {
+		if(!puedeAsignarseClase(sesion)) {
+			throw new SeSuperponenClasesException("La clase que se desea asignar a la sala "+ id +" se superone a otra clase");
 		}
-		sesiones.add(sesion);
+		clases.add(sesion);
 	}
 }

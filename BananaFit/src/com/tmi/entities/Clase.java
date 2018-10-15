@@ -3,37 +3,83 @@ package com.tmi.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+import com.tmi.exceptions.DiaInexistenteException;
 import com.tmi.exceptions.LaSesionTieneCupoLlenoException;
 
 @Entity
-public class Clase {
+@Table(name="CLASE")
+public class Clase extends AbsEntity{
 
-	private Integer id;
+	public static enum Dia {
+		LUNES (1,"Lunes"),
+		MARTES (2,"Martes"),
+		MIERCOES (3,"Miercoles"),
+		JUEVES (4,"Jueves"),
+		VIERNES (5,"Viernes"),
+		SABADO (6,"Sabado"),
+		DOMINGO (7, "Domingo");
+		
+	    private Integer id;
+	    private String nombre;
+	    
+	    Dia(Integer id, String nombre) {
+	        this.id = id;
+	        this.nombre = nombre;
+	    }
+	    
+	    public Integer getId() { return id; }
+	    
+	    public String getNombre() { return nombre; }
+	    
+	    public static Dia getById(Integer id) throws DiaInexistenteException {
+			for(Dia dia: Dia.values())
+				if(dia.getId().equals(id))
+					return dia;
+			throw new DiaInexistenteException("No existe un dia con id "+id);
+		}
+	}
 	
 	/**
 	 * Cantidad de minutos desde la 00hs
 	 */
+	
+	@Column (name="MINUTO_INICIO", nullable=true)
 	private int minutoInicio;
 	
-	private Profesor docente;
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="PROFESOR_ID")
+	private Profesor profesor;
 	
+	@Column (name="DIA", nullable=true)
 	private int dia;
 
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="ACTIVIDAD_ID")
 	private Actividad actividad;
 	
+	@ManyToMany(mappedBy = "clases", cascade = {CascadeType.ALL},fetch=FetchType.LAZY)
 	private List<Usuario> inscriptos;
 	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="SALA_ID")
 	private Sala sala;
 	
 	public Clase () { }
 	
-	public Clase(int minutoInicio, Profesor docente, int dia, Actividad actividad, Sala sala) {
+	public Clase(int minutoInicio, Profesor profesor, int dia, Actividad actividad, Sala sala) {
 		super();
 		this.inscriptos= new ArrayList<>();
 		this.minutoInicio = minutoInicio;
-		this.docente = docente;
+		this.profesor = profesor;
 		this.dia = dia;
 		this.actividad = actividad;
 		this.setSala(sala);
@@ -45,14 +91,6 @@ public class Clase {
 
 	public void setActividad(Actividad actividad) {
 		this.actividad = actividad;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	/**
@@ -69,12 +107,12 @@ public class Clase {
 		this.minutoInicio = minutoInicio;
 	}
 
-	public Profesor getDocente() {
-		return docente;
+	public Profesor getProfesor() {
+		return profesor;
 	}
 
-	public void setDocente(Profesor docente) {
-		this.docente = docente;
+	public void setProfesor(Profesor profesor) {
+		this.profesor = profesor;
 	}
 
 	public int getDia() {
@@ -111,16 +149,16 @@ public class Clase {
 	    return false;
 	}
 	
-	public void inscribirPersona(Usuario persona) throws LaSesionTieneCupoLlenoException {
+	public void inscribirUsuario(Usuario usuario) throws LaSesionTieneCupoLlenoException {
 		if (inscriptos.size()==sala.getCapacidad()) {
-			throw new LaSesionTieneCupoLlenoException("La Sesion "+ id + " de la Clase "+ actividad.getId()+" ya posee el cupo completo.");
+			throw new LaSesionTieneCupoLlenoException("La clase "+ id + " de la actividad"+ actividad.getId()+" ya posee el cupo completo.");
 		} else {
-			inscriptos.add(persona);
+			inscriptos.add(usuario);
 		}
 	}
 	
-	public void removerPersona(Usuario persona) {
-		inscriptos.remove(persona);
+	public void removerUsuario(Usuario usuario) {
+		inscriptos.remove(usuario);
 	}
 	
 	/**

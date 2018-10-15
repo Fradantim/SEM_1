@@ -42,10 +42,6 @@ public class RutinaController {
 		return getRutinasAsociadas(usuario);
 	}
 	
-	
-	
-	
-	
 	public Rutina altaRutina(Integer idUserCreador, String nombre, String descripcion, int series, int duracionEjercicio, Boolean publica) throws ObjetoInexistenteException {
 		Usuario user = usuarioDao.getById(idUserCreador);
 		return altaRutina(user, nombre, descripcion, series, duracionEjercicio,publica);

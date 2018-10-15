@@ -6,7 +6,8 @@ import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 import com.tmi.exceptions.SeSuperponenClasesException;
 
@@ -14,7 +15,7 @@ import com.tmi.exceptions.SeSuperponenClasesException;
 @DiscriminatorValue("PROFESOR")
 public class Profesor extends Usuario{
 
-	@Transient //TODO ARMAR MAPEO
+	@OneToMany(mappedBy = "profesor",fetch=FetchType.LAZY)
 	private List<Clase> clasesDictadas;
 
 	public Profesor() {}
@@ -43,9 +44,9 @@ public class Profesor extends Usuario{
 	    return false;
 	}
 	
-	public void asignarClase(Clase sesion) throws SeSuperponenClasesException {
+	public void dictarClase(Clase sesion) throws SeSuperponenClasesException {
 		if(!puedeAsistirALaClase(sesion)) {
-			throw new SeSuperponenClasesException("La sesion "+sesion.getId() +" que se desea asignar al docente "+ id +" se superone a otra clase");
+			throw new SeSuperponenClasesException("La clase "+sesion.getId() +" que se desea asignar al docente "+ id +" se superone a otra clase");
 		}
 		
 		clasesDictadas.add(sesion);

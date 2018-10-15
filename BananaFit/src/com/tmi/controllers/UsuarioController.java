@@ -9,18 +9,23 @@ import java.util.Map;
 import com.tmi.daos.Dao;
 import com.tmi.daos.UsuarioDao;
 import com.tmi.entities.Administrativo;
+import com.tmi.entities.Clase;
+import com.tmi.entities.Clase.Dia;
 import com.tmi.entities.NIF;
 import com.tmi.entities.Profesor;
 import com.tmi.entities.Rutina;
+import com.tmi.entities.Sala;
 import com.tmi.entities.Socio;
 import com.tmi.entities.Usuario;
 import com.tmi.entities.Usuario.TipoUsuario;
+import com.tmi.exceptions.DiaInexistenteException;
 import com.tmi.exceptions.ObjetoInexistenteException;
 import com.tmi.exceptions.TipoDeUsuarioInexistenteException;
 import com.tmi.exceptions.YaExisteElUsuarioException;
 
 public class UsuarioController {
 	private Dao<Rutina> rutinaDao= new Dao<Rutina>(Rutina.class);
+	private Dao<Profesor> profesorDao= new Dao<Profesor>(Profesor.class);
 	private UsuarioDao usuarioDao = new UsuarioDao();
 	private Dao<NIF> NIFDao= new Dao<NIF>(NIF.class);
 	
@@ -133,5 +138,20 @@ public class UsuarioController {
 	public void borrarUsuario(Usuario usuario){
 		usuarioDao.borrar(usuario);
 	}
+
+	public List<Profesor> getProfesorDisponibles(Dia dia, int minuroInicio, int duracion) {
+		List<Profesor> result = new ArrayList<>();
+		Clase auxClase = new Clase(minuroInicio, null, dia.getId(), null, null);
+		for(Profesor profesor : profesorDao.getAll()) {
+			if(profesor.puedeAsistirALaClase(auxClase)) {
+				result.add(profesor);
+			}
+		}
+		return result;
+	}
 	
+	public List<Profesor> getProfesorDisponibles(Integer idDia, int minuroInicio, int duracion) throws DiaInexistenteException {
+		Dia dia = Dia.getById(idDia);
+		return getProfesorDisponibles(dia, minuroInicio, duracion);
+	}
 }

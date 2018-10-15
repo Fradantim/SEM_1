@@ -3,22 +3,29 @@ package com.tmi.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
-public class Actividad {
+@Table(name="ACTIVIDAD")
+public class Actividad extends AbsEntity{
 	
-	private Integer id;
-	
+	@Column (name="NOMBRE", nullable=true)
 	private String nombre;
 	
 	/**
 	 * En minutos
 	 */
+	@Column (name="DURACION", nullable=true)
 	private int duracion;
 	
+	@Column (name="DESCRIPCION", nullable=true)
 	private String descripcion;
 
+	@OneToMany(mappedBy = "actividad",fetch=FetchType.LAZY)
 	private List<Clase> clases;
 
 	public Actividad() { }
@@ -29,14 +36,6 @@ public class Actividad {
 		this.nombre = nombre;
 		this.duracion = duracion;
 		this.descripcion = descripcion;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getNombre() {
